@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class APIConfig {
-    @Value("${demo.api.key}")
+    @Value("${langchain4j.open-ai.chat-model.api-key}")
     String apiKey;
-    @Value("${demo.api.base-url}")
+    @Value("${langchain4j.open-ai.chat-model.base-url}")
     String baseUrl;
-    @Value("${demo.api.model-name}")
+    @Value("${langchain4j.open-ai.chat-model.model-name}")
     String modelName;
     public String getBaseUrl() {
         return baseUrl;
