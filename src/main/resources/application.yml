@@ -3,3 +3,38 @@ spring:
     name: LangChain4jDemo
   config:
     import: optional:application-secret.yml
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  datasource:
+    url: jdbc:mysql://${ai-chat.db.host}:${ai-chat.db.port}/${ai-chat.db.schema}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    username: ${ai-chat.db.username}
+    password: ${ai-chat.db.password}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: ${REDIS_HOST:127.0.0.1}
+      port: ${REDIS_PORT:6379}
+     # database: ${REDIS_DATABASE:0}
+     # password: ${REDIS_PASSWORD:}
+      timeout: 5s
+  sql:
+    init:
+      mode: always
+      encoding: UTF-8
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      id-type: auto
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:change-me-to-a-very-long-jwt-secret-key-1234567890}
+    expiration-seconds: 604800
+    issuer: langchain4j-demo
+  chat:
+    memory-max-messages: ${APP_CHAT_MEMORY_MAX_MESSAGES:20}
+    memory-ttl-days: ${APP_CHAT_MEMORY_TTL_DAYS:7}

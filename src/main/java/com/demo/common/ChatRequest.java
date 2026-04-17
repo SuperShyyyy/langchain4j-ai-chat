@@ -1,24 +1,11 @@
 package com.demo.common;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
 public class ChatRequest {
 
+    @NotBlank(message = "消息内容不能为空")
     private String message;
-
-    private String memoryId;
-
-    private String userId;
-
-    private Boolean stream = true;
-
-    private Boolean enableSearch = true;
-
-    private Double temperature = 0.75;
-
-    private Integer maxTokens = 1024;
-
-    private Double topP = 0.9;
-
 }

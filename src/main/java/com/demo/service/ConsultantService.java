@@ -1,6 +1,5 @@
 package com.demo.service;
 
-import dev.langchain4j.memory.ChatMemory;
 import dev.langchain4j.service.MemoryId;
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
@@ -15,8 +14,7 @@ import reactor.core.publisher.Flux;
         chatMemoryProvider ="chatMemoryProvider"
 )
 public interface ConsultantService {
-   @SystemMessage(value = "你好")
-   public Flux<String> chat(
-           @MemoryId Object MemoryId,
-           @UserMessage String message);
+
+    @SystemMessage("你好")
+    Flux<String> chat(@MemoryId Object memoryId, @UserMessage String message);
 }
