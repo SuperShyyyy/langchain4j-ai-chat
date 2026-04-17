@@ -1,41 +1,38 @@
 package com.demo.controller;
 
 import com.demo.common.ChatRequest;
-import com.demo.common.Result;
 import com.demo.service.ConsultantService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import org.springframework.http.MediaType; // 引入 MediaType
+
+@Slf4j
 @RestController
 @RequestMapping("/ai")
 public class ChatController {
-/*
-    @Autowired
-    private ChatService chatService;
-
-    @PostMapping("/chat")
-    public Result<String> chat(@RequestBody ChatRequest request) {
-        try {
-            String result = chatService.chat(request.getMessage());
-            return Result.success(result);
-        } catch (Exception e) {
-            return Result.error("AI服务异常");
-        }
-    }*/
 
     @Autowired
     private ConsultantService consultantService;
 
     @PostMapping(value = "/chat", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<String> chat(@RequestBody ChatRequest request) {
-        try {
-            return consultantService.chat(request.getMessage());
-        } catch (Exception e) {
-            return Flux.error(new RuntimeException("AI服务异常：" + e.getMessage()));
+        if (request == null) {
+            throw new IllegalArgumentException("请求体为空");
         }
+        String messageContent = request.getMessage();
+        if (messageContent == null || messageContent.trim().isEmpty()) {
+            throw new IllegalArgumentException("消息内容不能为空 (message is required)");
+        }
+        Object memoryId = request.getMemoryId();
+        if (memoryId == null || memoryId.toString().trim().isEmpty()) {
+            memoryId = request.getUserId() != null ? request.getUserId() : "default-session-" + System.currentTimeMillis();
+        }
+        log.info("Received request: {}", request);
+        return consultantService.chat(memoryId, messageContent);
     }
 }

@@ -7,6 +7,8 @@ public class ChatRequest {
 
     private String message;
 
+    private String memoryId;
+
     private String userId;
 
     private Boolean stream = true;
